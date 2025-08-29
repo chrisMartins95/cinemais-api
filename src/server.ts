@@ -1,5 +1,6 @@
 import Fastify from "fastify";
-import mediaRoutes from "./routes/mediaRoutes"; // <-- importar rotas
+import mediaRoutes from "./routes/mediaRoutes"; // <-- importar rotas media
+import favoriteRoutes from "./routes/favoriteRoutes"; // <-- importar rotas favorite
 
 const app = Fastify({ logger: true });
 
@@ -10,6 +11,9 @@ app.get("/", async () => {
 
 // Registrar rotas de mídia
 app.register(mediaRoutes, { prefix: "/media" });
+
+// Registrar rotas de favoritos
+app.register(favoriteRoutes, { prefix: "/users" });
 
 // Iniciar servidor
 const start = async () => {
