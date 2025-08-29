@@ -7,6 +7,14 @@
     "strict": true,                      // Ativa verificações de tipos mais seguras
     "esModuleInterop": true,             // Permite importar libs com sintaxe "import"
     "skipLibCheck": true,                // Ignora checagem de tipos de libs externas
-    "forceConsistentCasingInFileNames": true // Evita problemas com letras maiúsculas/minúsculas
-  }
+    "forceConsistentCasingInFileNames": true, // Evita problemas com letras maiúsculas/minúsculas
+    "types": ["node", "jest"]            // ⬅️ Adicionado para suportar Jest
+  },
+
+   "include": [
+    "src",                               // inclui seu código
+    "**/*.test.ts",                      // inclui testes
+    "**/*.spec.ts"                       // inclui testes (se você usar esse sufixo)
+  ]
+
 }
