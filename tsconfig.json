@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                  // Permite usar recursos modernos do JS
+    "module": "CommonJS",                // Compatível com Node.js
+    "rootDir": "src",                    // Onde ficam os arquivos .ts
+    "outDir": "dist",                    // Onde vão os arquivos compilados .js
+    "strict": true,                      // Ativa verificações de tipos mais seguras
+    "esModuleInterop": true,             // Permite importar libs com sintaxe "import"
+    "skipLibCheck": true,                // Ignora checagem de tipos de libs externas
+    "forceConsistentCasingInFileNames": true // Evita problemas com letras maiúsculas/minúsculas
+  }
+}
