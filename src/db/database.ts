@@ -30,3 +30,19 @@ db.run(`
     console.log("Tabela de mídias pronta!");
   }
 });
+
+// Criar tabela de favoritos
+db.run(`
+  CREATE TABLE IF NOT EXISTS favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    mediaId INTEGER NOT NULL,
+    FOREIGN KEY (mediaId) REFERENCES media (id)
+  )
+`, (err) => {
+  if (err) {
+    console.error("Erro ao criar tabela de favoritos:", err.message);
+  } else {
+    console.log("Tabela de favoritos pronta!");
+  }
+});
