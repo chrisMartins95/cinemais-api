@@ -1,0 +1,20 @@
+# Ignorar dependências locais
+node_modules
+dist
+
+# Logs
+npm-debug.log
+yarn-error.log
+*.log
+
+# Git
+.git
+.gitignore
+
+# Configs locais
+.env
+.env.local
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
