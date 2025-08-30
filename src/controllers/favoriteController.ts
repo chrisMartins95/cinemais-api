@@ -2,31 +2,33 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { db } from "../db/database";
 import { addFavoriteSchema } from "../schemas/favoriteSchema";
 
+// Adicionar mídia aos favoritos
 export const addFavorite = (req: FastifyRequest<{ Params: { userId: string }, Body: any }>, reply: FastifyReply) => {
   const { userId } = req.params;
 
-  // ✅ Validação com Zod
-  let mediaId: number;
-  try {
-    mediaId = addFavoriteSchema.parse(req.body).mediaId;
-  } catch (err) {
-    // Zod lança ZodError se algo estiver errado
-    return reply.code(400).send({ error: err instanceof Error ? err.message : "Dados inválidos" });
-  }
+  // Validação do body (lança ZodError se inválido)
+  const { mediaId } = addFavoriteSchema.parse(req.body);
 
-  // 1) Verificar se a mídia existe
+  // Verificar se a mídia existe
   db.get("SELECT * FROM media WHERE id = ?", [mediaId], (err, mediaRow) => {
-    if (err) return reply.code(500).send({ message: "Erro ao buscar mídia", error: err.message });
-    if (!mediaRow) return reply.code(404).send({ message: "Mídia não encontrada" });
+    if (err) throw new Error(`Erro ao buscar mídia: ${err.message}`);
+    if (!mediaRow) {
+      const error = new Error("Mídia não encontrada");
+      (error as any).statusCode = 404; // para o errorHandler retornar 404
+      throw error;
+    }
 
-    // 2) Verificar se já está favoritado
+    // Verificar se já está favoritado
     db.get("SELECT * FROM favorites WHERE userId = ? AND mediaId = ?", [userId, mediaId], (err2, favRow) => {
-      if (err2) return reply.code(500).send({ message: "Erro ao verificar favoritos", error: err2.message });
-      if (favRow) return reply.code(204).send();
+      if (err2) throw new Error(`Erro ao verificar favoritos: ${err2.message}`);
+      if (favRow) {
+        reply.code(204).send(); // já está favoritado
+        return;
+      }
 
-      // 3) Inserir favorito
+      // Inserir favorito
       db.run("INSERT INTO favorites (userId, mediaId) VALUES (?, ?)", [userId, mediaId], function (err3) {
-        if (err3) return reply.code(500).send({ message: "Erro ao adicionar favorito", error: err3.message });
+        if (err3) throw new Error(`Erro ao adicionar favorito: ${err3.message}`);
         reply.code(204).send();
       });
     });
