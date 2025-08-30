@@ -1,19 +1,18 @@
 // src/server.ts
-import Fastify from "fastify";
-import mediaRoutes from "./routes/mediaRoutes";
-import favoriteRoutes from "./routes/favoriteRoutes";
-import errorHandler from "./plugins/errorHandler";
+import Fastify from 'fastify';
+import mediaRoutes from './routes/mediaRoutes';
+import favoriteRoutes from './routes/favoriteRoutes';
+import errorHandler from './plugins/errorHandler';
 
 export async function buildServer() {
   const server = Fastify({ logger: false }); // logger false para testes limpos
   // registrar handler de erros primeiro
-  errorHandler(server)
+  errorHandler(server);
   // registrar rotas
-  server.register(mediaRoutes, { prefix: "/media" });
-  server.register(favoriteRoutes, { prefix: "/users" });
+  server.register(mediaRoutes, { prefix: '/media' });
+  server.register(favoriteRoutes, { prefix: '/users' });
   return server;
 }
-
 
 // Se iniciarmos diretamente (node src/server.ts), sobe o servidor
 if (require.main === module) {
@@ -21,7 +20,7 @@ if (require.main === module) {
     const server = await buildServer();
     try {
       await server.listen({ port: 3000 });
-      console.log("Servidor rodando em http://localhost:3000");
+      console.log('Servidor rodando em http://localhost:3000');
     } catch (err) {
       server.log.error(err);
       process.exit(1);
