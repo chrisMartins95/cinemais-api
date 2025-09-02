@@ -1,23 +1,26 @@
-# 1. Usar Node 18 (não alpine)
+# Dockerfile para o projeto cinemais-api.
+# Define o ambiente, instala dependências, compila o TypeScript e inicia o servidor.
+
+# Usar imagem oficial do Node.js 18
 FROM node:18
 
-# 2. Diretório de trabalho
+# Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# 3. Copiar só package.json e package-lock.json
+# Copia arquivos de dependências
 COPY package*.json ./
 
-# 4. Instalar dependências dentro do container
+# Instala dependências do projeto
 RUN npm install
 
-# 5. Copiar o restante do código (sem node_modules)
+# Copia o restante do código do projeto
 COPY . .
 
-# 6. Compilar TypeScript (gera dist/)
+# Compila o TypeScript (gera dist/)
 RUN npm run build
 
-# 7. Expor porta
+# Expõe a porta 3000 para acesso externo
 EXPOSE 3000
 
-# 8. Rodar app
+# Inicia a aplicação
 CMD ["node", "dist/server.js"]

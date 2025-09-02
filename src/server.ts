@@ -1,20 +1,22 @@
-// src/server.ts
+/**
+ * Inicializa e configura o servidor Fastify da API cinemais.
+ * Registra plugins de tratamento de erro, rotas e inicia o servidor na porta 3000.
+ */
+
 import Fastify from 'fastify';
 import mediaRoutes from './routes/mediaRoutes';
 import favoriteRoutes from './routes/favoriteRoutes';
 import errorHandler from './plugins/errorHandler';
 
 export async function buildServer() {
-  const server = Fastify({ logger: false }); // logger false para testes limpos
-  // registrar handler de erros primeiro
-  errorHandler(server);
-  // registrar rotas
-  server.register(mediaRoutes, { prefix: '/media' });
-  server.register(favoriteRoutes, { prefix: '/users' });
+  const server = Fastify({ logger: false }); // Logger desativado para testes limpos
+  errorHandler(server); // Registra o handler de erros
+  server.register(mediaRoutes, { prefix: '/media' }); // Rotas de mídia
+  server.register(favoriteRoutes, { prefix: '/users' }); // Rotas de favoritos
   return server;
 }
 
-// Se iniciarmos diretamente (node src/server.ts), sobe o servidor
+// Inicializa o servidor se o arquivo for executado diretamente
 if (require.main === module) {
   (async () => {
     const server = await buildServer();

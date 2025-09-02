@@ -1,3 +1,8 @@
+/**
+ * Controllers das rotas de favoritos da API Fastify.
+ * Lida com adicionar, listar e remover mídias favoritas de um usuário no banco SQLite.
+ */
+
 import { FastifyReply, FastifyRequest } from "fastify";
 import { db } from "../db/database";
 import { addFavoriteSchema } from "../schemas/favoriteSchema";
@@ -8,7 +13,7 @@ export const addFavorite = (
   reply: FastifyReply
 ) => {
   const { userId } = req.params;
-  const { mediaId } = addFavoriteSchema.parse(req.body);
+  const { mediaId } = addFavoriteSchema.parse(req.body); // Valida o corpo da requisição
 
   db.get("SELECT * FROM media WHERE id = ?", [mediaId], (err, mediaRow) => {
     if (err) throw new Error(`Erro ao buscar mídia: ${err.message}`);
@@ -24,7 +29,7 @@ export const addFavorite = (
       (err2, favRow) => {
         if (err2) throw new Error(`Erro ao verificar favoritos: ${err2.message}`);
         if (favRow) {
-          reply.code(204).send();
+          reply.code(204).send(); // Já é favorito, retorna 204
           return;
         }
 
@@ -33,7 +38,7 @@ export const addFavorite = (
           [userId, mediaId],
           function (err3) {
             if (err3) throw new Error(`Erro ao adicionar favorito: ${err3.message}`);
-            reply.code(204).send();
+            reply.code(204).send(); // Adicionado com sucesso
           }
         );
       }
@@ -49,6 +54,7 @@ export const listFavorites = (
   const { userId } = req.params;
 
   db.all(
+    // Busca favoritos do usuário e retorna dados da mídia
     "SELECT f.id, f.mediaId, m.title, m.type FROM favorites f JOIN media m ON f.mediaId = m.id WHERE f.userId = ?",
     [userId],
     (err, rows) => {
@@ -81,7 +87,7 @@ export const removeFavorite = (
         return reply.status(404).send({ error: "Favorito não encontrado" });
       }
 
-      return reply.code(204).send();
+      return reply.code(204).send(); // Removido com sucesso
     }
   );
 };

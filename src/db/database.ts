@@ -1,4 +1,8 @@
-// src/db/database.ts
+/**
+ * Gerencia a conexão e estrutura do banco SQLite usado pela API cinemais.
+ * Conecta ao banco, cria as tabelas necessárias e fornece helpers para testes.
+ */
+
 import sqlite3 from 'sqlite3';
 import path from 'path';
 

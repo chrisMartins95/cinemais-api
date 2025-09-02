@@ -1,3 +1,8 @@
+/**
+ * Controllers das rotas de mídia da API Fastify.
+ * Lida com listagem, criação e busca de mídias no banco SQLite.
+ */
+
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { db } from '../db/database';
 import { Media } from '../models/Media';
